@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- Single Page Header start -->
+<div class="container-fluid page-header py-5">
+	<h1 class="text-center text-white display-6 wow fadeInUp" data-wow-delay="0.1s">Register</h1>
+	<ol class="breadcrumb justify-content-center mb-0 wow fadeInUp" data-wow-delay="0.3s">
+		<li class="breadcrumb-item"><a href="{% url 'store:homepage' %}">Home</a></li>
+		<li class="breadcrumb-item"><a href="#">Accounts</a></li>
+		<li class="breadcrumb-item active text-white">Register</li>
+	</ol>
+</div>
+<!-- Single Page Header End -->
+
+<div class="container-fluid py-5">
+	<div class="container py-5">
+			<div class="row justify-content-center">
+				<div class="col-12 col-md-10 col-lg-7">
+					<div class="bg-light rounded p-5">
+					<div class="text-center mb-4">
+						<h4 class="text-primary border-bottom border-primary border-2 d-inline-block pb-2">Create
+							Account</h4>
+						<p class="mb-0 text-dark">Join us in a minute</p>
+					</div>
+
+					<form method="post" action="">
+						{% csrf_token %}
+						{% if form.non_field_errors %}
+							<div class="alert alert-danger" role="alert">
+								{% for error in form.non_field_errors %}
+									<div>{{ error }}</div>
+								{% endfor %}
+							</div>
+						{% endif %}
+						<div class="row g-3">
+							<div class="col-12">
+								<div class="form-floating">
+									<input type="text" class="form-control{% if form.first_name.errors %} is-invalid{% endif %}" id="{{ form.first_name.id_for_label }}" name="{{ form.first_name.html_name }}" placeholder="First name" value="{{ form.first_name.value|default_if_none:'' }}" required>
+									<label for="{{ form.first_name.id_for_label }}">First name</label>
+									{% for error in form.first_name.errors %}
+										<div class="text-danger small mt-1">{{ error }}</div>
+									{% endfor %}
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="form-floating">
+									<input type="text" class="form-control{% if form.last_name.errors %} is-invalid{% endif %}" id="{{ form.last_name.id_for_label }}" name="{{ form.last_name.html_name }}" placeholder="Last name" value="{{ form.last_name.value|default_if_none:'' }}" required>
+									<label for="{{ form.last_name.id_for_label }}">Last name</label>
+									{% for error in form.last_name.errors %}
+										<div class="text-danger small mt-1">{{ error }}</div>
+									{% endfor %}
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="form-floating">
+									<input type="email" class="form-control{% if form.email.errors %} is-invalid{% endif %}" id="{{ form.email.id_for_label }}" name="{{ form.email.html_name }}" placeholder="Email" value="{{ form.email.value|default_if_none:'' }}" required>
+									<label for="{{ form.email.id_for_label }}">Email</label>
+									{% for error in form.email.errors %}
+										<div class="text-danger small mt-1">{{ error }}</div>
+									{% endfor %}
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="form-floating">
+									<input type="password" class="form-control{% if form.password1.errors %} is-invalid{% endif %}" id="{{ form.password1.id_for_label }}" name="{{ form.password1.html_name }}" placeholder="Password" required>
+									<label for="{{ form.password1.id_for_label }}">Password</label>
+									{% for error in form.password1.errors %}
+										<div class="text-danger small mt-1">{{ error }}</div>
+									{% endfor %}
+								</div>
+							</div>
+							<div class="col-12">
+								<div class="form-floating">
+									<input type="password" class="form-control{% if form.password2.errors %} is-invalid{% endif %}" id="{{ form.password2.id_for_label }}" name="{{ form.password2.html_name }}" placeholder="Confirm password" required>
+									<label for="{{ form.password2.id_for_label }}">Confirm password</label>
+									{% for error in form.password2.errors %}
+										<div class="text-danger small mt-1">{{ error }}</div>
+									{% endfor %}
+								</div>
+							</div>
+
+
+
+
+							<div class="col-12">
+								<div class="form-check">
+									<input class="form-check-input" type="checkbox" value="1" id="terms" name="terms"
+										required>
+									<label class="form-check-label" for="terms">
+										I agree to the <a class="text-primary" href="#">Terms & Conditions</a>
+									</label>
+								</div>
+							</div>
+
+							<div class="col-12">
+								<button type="submit" class="btn btn-primary w-100 rounded-pill py-3">
+									<i class="fas fa-user-plus me-2"></i> Create Account
+								</button>
+							</div>
+
+							<div class="col-12 text-center">
+								<span class="text-dark">Already have an account?</span>
+								<a class="text-primary fw-bold" href="{% url 'accounts:loginpage' %}">Login</a>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock content %}

@@ -42,6 +42,18 @@
     {% block header %}
     {% include 'header.html' %}
     {% endblock header %}
+
+    {% if messages %}
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1080; max-width: 420px;">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show mb-2" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     {% block content %}
     {% endblock content %}
 

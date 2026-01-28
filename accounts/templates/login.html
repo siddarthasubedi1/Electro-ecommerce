@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<!-- Single Page Header start -->
+<div class="container-fluid page-header py-5">
+	<h1 class="text-center text-white display-6 wow fadeInUp" data-wow-delay="0.1s">Login</h1>
+	<ol class="breadcrumb justify-content-center mb-0 wow fadeInUp" data-wow-delay="0.3s">
+		<li class="breadcrumb-item"><a href="{% url 'store:homepage' %}">Home</a></li>
+		<li class="breadcrumb-item"><a href="#">Accounts</a></li>
+		<li class="breadcrumb-item active text-white">Login</li>
+	</ol>
+</div>
+<!-- Single Page Header End -->
+
+<div class="container-fluid py-5">
+	<div class="container py-5">
+		<div class="row justify-content-center">
+			<div class="col-12 col-md-10 col-lg-6">
+				<div class="bg-light rounded p-5">
+					<div class="text-center mb-4">
+						<h4 class="text-primary border-bottom border-primary border-2 d-inline-block pb-2">Welcome Back</h4>
+						<p class="mb-0 text-dark">Sign in to continue</p>
+					</div>
+
+					<form method="post" action="">
+						{% csrf_token %}
+
+						<div class="form-floating mb-3">
+							<input type="text" class="form-control" id="username" name="email" placeholder="email" required>
+							<label for="username">Email</label>
+						</div>
+
+						<div class="form-floating mb-3">
+							<input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+							<label for="password">Password</label>
+						</div>
+
+						<div class="d-flex align-items-center justify-content-between mb-4">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" value="1" id="remember" name="remember">
+								<label class="form-check-label" for="remember">Remember me</label>
+							</div>
+							<a class="text-primary" href="#">Forgot password?</a>
+						</div>
+
+						<button type="submit" class="btn btn-primary w-100 rounded-pill py-3">
+							<i class="fas fa-sign-in-alt me-2"></i> Login
+						</button>
+
+						<div class="text-center mt-4">
+							<span class="text-dark">Don’t have an account?</span>
+							<a class="text-primary fw-bold" href="{% url 'accounts:registerpage' %}">Register</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock content %}

@@ -32,9 +32,13 @@
                     <a href="#" class="dropdown-toggle text-muted ms-2" data-bs-toggle="dropdown"><small><i
                                 class="fa fa-home me-2"></i> My Dashboard</small></a>
                     <div class="dropdown-menu rounded">
+                        {% if user.is_authenticated %}
+                            <span class="dropdown-item-text text-muted">{{ user.email }}</span>
+                        {% endif %}
+
                         <a href="{% url 'accounts:loginpage' %}" class="dropdown-item"> Login</a>
                         <a href="{% url 'accounts:registerpage' %}" class="dropdown-item"> Register</a>
-                        <a href="{% url 'accounts:loginpage' %}" class="dropdown-item"> Log Out</a>
+                        <a href="{% url 'accounts:logout' %}" class="dropdown-item"> Log Out</a>
                     </div>
                 </div>
             </div>
