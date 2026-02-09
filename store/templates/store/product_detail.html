@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row g-4 align-items-start">
+        <div class="col-md-6">
+            <div class="border rounded p-3 bg-white">
+                {% if product.image %}
+                <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.name }}">
+                {% else %}
+                <img src="{% static 'img/product-3.png' %}" class="img-fluid rounded" alt="{{ product.name }}">
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <h1 class="mb-3">{{ product.name }}</h1>
+            <div class="mb-3">
+                {% if product.old_price and product.old_price != product.price %}
+                <del class="me-2 fs-5 text-muted">${{ product.old_price }}</del>
+                {% endif %}
+                <span class="fs-3 text-primary fw-bold">${{ product.price }}</span>
+            </div>
+            <p class="text-muted">{{ product.description }}</p>
+
+            <div class="d-flex gap-2 mt-4">
+                <a class="btn btn-primary rounded-pill px-4" href="{% url 'cart:cartpage' %}">Add To Cart</a>
+                <a class="btn btn-outline-secondary rounded-pill px-4" href="{% url 'store:shoppage' %}">Back to Shop</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
