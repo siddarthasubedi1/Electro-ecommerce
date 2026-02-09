@@ -12,8 +12,10 @@
     spinner(0);
     
     
-    // Initiate the wowjs
-    new WOW().init();
+    // Initiate the wowjs (guarded so missing wow.js doesn't break the whole page)
+    if (typeof WOW !== 'undefined') {
+        new WOW().init();
+    }
 
 
     // Sticky Navbar
@@ -27,117 +29,127 @@
 
 
     // Hero Header carousel
-    $(".header-carousel").owlCarousel({
-        items: 1,
-        autoplay: true,
-        smartSpeed: 2000,
-        center: false,
-        dots: false,
-        loop: true,
-        margin: 0,
-        nav : true,
-        navText : [
-            '<i class="bi bi-arrow-left"></i>',
-            '<i class="bi bi-arrow-right"></i>'
-        ]
-    });
+    if ($.fn && $.fn.owlCarousel) {
+        $(".header-carousel").owlCarousel({
+            items: 1,
+            autoplay: true,
+            smartSpeed: 2000,
+            center: false,
+            dots: false,
+            loop: true,
+            margin: 0,
+            nav: true,
+            navText: [
+                '<i class="bi bi-arrow-left"></i>',
+                '<i class="bi bi-arrow-right"></i>'
+            ]
+        });
+    }
 
 
     // ProductList carousel
-    $(".productList-carousel").owlCarousel({
-        autoplay: true,
-        smartSpeed: 2000,
-        dots: false,
-        loop: true,
-        margin: 25,
-        nav : true,
-        navText : [
-            '<i class="fas fa-chevron-left"></i>',
-            '<i class="fas fa-chevron-right"></i>'
-        ],
-        responsiveClass: true,
-        responsive: {
-            0:{
-                items:1
-            },
-            576:{
-                items:1
-            },
-            768:{
-                items:2
-            },
-            992:{
-                items:2
-            },
-            1200:{
-                items:3
+    if ($.fn && $.fn.owlCarousel) {
+        $(".productList-carousel").owlCarousel({
+            autoplay: true,
+            smartSpeed: 2000,
+            dots: false,
+            loop: true,
+            margin: 25,
+            nav: true,
+            navText: [
+                '<i class="fas fa-chevron-left"></i>',
+                '<i class="fas fa-chevron-right"></i>'
+            ],
+            responsiveClass: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                576: {
+                    items: 1
+                },
+                768: {
+                    items: 2
+                },
+                992: {
+                    items: 2
+                },
+                1200: {
+                    items: 3
+                }
             }
-        }
-    });
+        });
+    }
 
     // ProductList categories carousel
-    $(".productImg-carousel").owlCarousel({
-        autoplay: true,
-        smartSpeed: 1500,
-        dots: false,
-        loop: true,
-        items: 1,
-        margin: 25,
-        nav : true,
-        navText : [
-            '<i class="bi bi-arrow-left"></i>',
-            '<i class="bi bi-arrow-right"></i>'
-        ]
-    });
+    if ($.fn && $.fn.owlCarousel) {
+        $(".productImg-carousel").owlCarousel({
+            autoplay: true,
+            smartSpeed: 1500,
+            dots: false,
+            loop: true,
+            items: 1,
+            margin: 25,
+            nav: true,
+            navText: [
+                '<i class="bi bi-arrow-left"></i>',
+                '<i class="bi bi-arrow-right"></i>'
+            ]
+        });
+    }
 
 
     // Single Products carousel
-    $(".single-carousel").owlCarousel({
-        autoplay: true,
-        smartSpeed: 1500,
-        dots: true,
-        dotsData: true,
-        loop: true,
-        items: 1,
-        nav : true,
-        navText : [
-            '<i class="bi bi-arrow-left"></i>',
-            '<i class="bi bi-arrow-right"></i>'
-        ]
-    });
+    if ($.fn && $.fn.owlCarousel) {
+        $(".single-carousel").owlCarousel({
+            autoplay: true,
+            smartSpeed: 1500,
+            dots: true,
+            dotsData: true,
+            loop: true,
+            items: 1,
+            nav: true,
+            navText: [
+                '<i class="bi bi-arrow-left"></i>',
+                '<i class="bi bi-arrow-right"></i>'
+            ]
+        });
+    }
 
 
-    // ProductList carousel
-    $(".related-carousel").owlCarousel({
-        autoplay: true,
-        smartSpeed: 1500,
-        dots: false,
-        loop: true,
-        margin: 25,
-        nav : true,
-        navText : [
-            '<i class="fas fa-chevron-left"></i>',
-            '<i class="fas fa-chevron-right"></i>'
-        ],
-        responsiveClass: true,
-        responsive: {
-            0:{
-                items:1
-            },
-            576:{
-                items:1
-            },
-            768:{
-                items:2
-            },
-            992:{
-                items:3
-            },
-            1200:{
-                items:4
+    // Related carousel
+    if ($.fn && $.fn.owlCarousel) {
+        $(".related-carousel").owlCarousel({
+            autoplay: true,
+            smartSpeed: 1500,
+            dots: false,
+            loop: true,
+            margin: 25,
+            nav: true,
+            navText: [
+                '<i class="fas fa-chevron-left"></i>',
+                '<i class="fas fa-chevron-right"></i>'
+            ],
+            responsiveClass: true,
+            responsive: {
+                0: {
+                    items: 1
+                },
+                576: {
+                    items: 1
+                },
+                768: {
+                    items: 2
+                },
+                992: {
+                    items: 3
+                },
+                1200: {
+                    items: 4
+                }
             }
-        }
-    });
+        });
+    }
 
 
 
@@ -168,8 +180,16 @@
     }
     });
     $('.back-to-top').click(function () {
-        $('html, body').animate({scrollTop: 0}, 1500, 'easeInOutExpo');
+        var easing = ($.easing && $.easing.easeInOutExpo) ? 'easeInOutExpo' : 'swing';
+        $('html, body').animate({scrollTop: 0}, 1500, easing);
         return false;
+    });
+
+    // Prevent placeholder links from jumping to the top (often feels like a reload)
+    $(document).on('click', 'a[href="#"]', function (e) {
+        // Allow Bootstrap toggles (dropdown etc.) to handle their own behavior
+        if (this.hasAttribute('data-bs-toggle')) return;
+        e.preventDefault();
     });
 
 
