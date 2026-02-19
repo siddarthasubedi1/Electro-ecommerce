@@ -33,7 +33,7 @@
                                 class="fa fa-home me-2"></i> My Dashboard</small></a>
                     <div class="dropdown-menu rounded">
                         {% if user.is_authenticated %}
-                            <span class="dropdown-item-text text-muted">{{ user.email }}</span>
+                        <span class="dropdown-item-text text-muted">{{ user.email }}</span>
                         {% endif %}
 
                         <a href="{% url 'accounts:loginpage' %}" class="dropdown-item"> Login</a>
@@ -49,7 +49,7 @@
     <div class="row gx-0 align-items-center text-center">
         <div class="col-md-4 col-lg-3 text-center text-lg-start">
             <div class="d-inline-flex align-items-center">
-                <a href="" class="navbar-brand p-0">
+                <a href="{% url 'store:homepage' %}" class="navbar-brand p-0">
                     <h1 class="display-5 text-primary m-0"><i
                             class="fas fa-shopping-bag text-secondary me-2"></i>Electro</h1>
                     <!-- <img src="img/logo.png" alt="Logo"> -->
@@ -72,13 +72,78 @@
         </div>
         <div class="col-md-4 col-lg-3 text-center text-lg-end">
             <div class="d-inline-flex align-items-center">
-            <a href="#" class="text-muted d-flex align-items-center justify-content-center me-3"><span
-                class="rounded-circle btn-md-square border"><i class="fas fa-random"></i></span></a>
-            <a href="#" class="text-muted d-flex align-items-center justify-content-center me-3"><span
-                class="rounded-circle btn-md-square border"><i class="fas fa-heart"></i></span></a>
-            <a href="#" class="text-muted d-flex align-items-center justify-content-center"><span
-                class="rounded-circle btn-md-square border"><i class="fas fa-shopping-cart"></i></span>
-                    <span class="text-dark ms-2">$0.00</span></a>
+                <a href="#" class="text-muted d-flex align-items-center justify-content-center me-3"><span
+                        class="rounded-circle btn-md-square border"><i class="fas fa-random"></i></span></a>
+                <a href="" class="text-muted d-flex align-items-center justify-content-center me-3"><span
+                        class="rounded-circle btn-md-square border"><i class="fas fa-heart"></i></span></a>
+                <a href="{% url 'store:cart' %}" class="text-muted d-flex align-items-center justify-content-center me-3"><span
+                        class="rounded-circle btn-md-square border"><i class="fas fa-shopping-cart"></i></span>
+                    <span class="text-dark ms-2">{% if user.is_authenticated %}Rs{{ product.price.total }}{% endif %}</span></a>
+                
+                <!-- User Profile Icon -->
+                {% if user.is_authenticated %}
+                <div class="dropdown">
+                    <a href="#" class="text-muted d-flex align-items-center justify-content-center dropdown-toggle" 
+                       data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="rounded-circle btn-md-square border bg-primary text-white">
+                            <i class="fas fa-user"></i>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end rounded shadow">
+                        <div class="dropdown-item-text">
+                            <div class="d-flex align-items-center">
+                                <i class="fas fa-user-circle fa-2x text-primary me-2"></i>
+                                <div>
+                                    <small class="text-muted">Logged in as</small>
+                                    <div class="fw-bold">{{ user.email }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="{% url 'store:cart' %}" class="dropdown-item">
+                            <i class="fas fa-shopping-cart me-2"></i>My Cart
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-box me-2"></i>My Orders
+                        </a>
+                        <a href="#" class="dropdown-item">
+                            <i class="fas fa-user-cog me-2"></i>Profile Settings
+                        </a>
+                        <a href="{% url 'accounts:registerpage' %}" class="dropdown-item">
+                            <i class="fas fa-user-plus me-2 text-success"></i>Create New Account
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        <a href="{% url 'accounts:logout' %}" class="dropdown-item text-danger">
+                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                        </a>
+                    </div>
+                </div>
+                {% else %}
+                <div class="dropdown">
+                    <a href="#" class="text-muted d-flex align-items-center justify-content-center dropdown-toggle" 
+                       data-bs-toggle="dropdown" aria-expanded="false" title="Account">
+                        <span class="rounded-circle btn-md-square border">
+                            <i class="fas fa-user"></i>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-end rounded shadow" style="min-width: 250px;">
+                        <div class="dropdown-item-text">
+                            <div class="fw-bold text-center">
+                                <i class="fas fa-user-circle fa-2x text-muted mb-2 d-block"></i>
+                                <div class="mb-1">Welcome!</div>
+                                <small class="text-muted">Please login or register</small>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a href="{% url 'accounts:loginpage' %}" class="dropdown-item">
+                            <i class="fas fa-sign-in-alt me-2 text-primary"></i>Login
+                        </a>
+                        <a href="{% url 'accounts:registerpage' %}" class="dropdown-item">
+                            <i class="fas fa-user-plus me-2 text-success"></i>Create New Account
+                        </a>
+                    </div>
+                </div>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -111,18 +176,25 @@
                     </form>
                     <div class="navbar-nav ms-auto py-0">
                         {% with url_name=request.resolver_match.url_name %}
-                        <a href="{% url 'store:homepage' %}" class="nav-item nav-link{% if url_name == 'homepage' %} active{% endif %}">Home</a>
-                        <a href="{% url 'store:shoppage' %}" class="nav-item nav-link{% if url_name == 'shoppage' %} active{% endif %}">Shop</a>
-                       
+                        <a href="{% url 'store:homepage' %}"
+                            class="nav-item nav-link{% if url_name == 'homepage' %} active{% endif %}">Home</a>
+                        <a href="{% url 'store:shoppage' %}"
+                            class="nav-item nav-link{% if url_name == 'shoppage' %} active{% endif %}">Shop</a>
+
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Pages</a>
                             <div class="dropdown-menu m-0">
                                 <a href="{% url 'store:bestseller' %}" class="dropdown-item">Bestseller</a>
-                                <a href="{% url 'cart:cartpage' %}" class="dropdown-item">Cart Page</a>
-                                <a href="{% url 'cart:checkout' %}" class="dropdown-item">Checkout</a>
+                                
+                                <a href="{% url 'store:cart' %}" class="dropdown-item">Cart Page</a>
+                                
+                                <a href="" class="dropdown-item">Checkout</a>
+
+
                             </div>
                         </div>
-                        <a href="{% url 'accounts:contactpage' %}" class="nav-item nav-link me-2{% if url_name == 'contactpage' %} active{% endif %}">Contact</a>
+                        <a href="{% url 'accounts:contactpage' %}"
+                            class="nav-item nav-link me-2{% if url_name == 'contactpage' %} active{% endif %}">Contact</a>
                         {% endwith %}
                         <div class="nav-item dropdown d-block d-lg-none mb-3">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">All Category</a>
@@ -163,7 +235,7 @@
                         </div>
                     </div>
                     <a href="" class="btn btn-secondary rounded-pill py-2 px-4 px-lg-3 mb-3 mb-md-3 mb-lg-0"><i
-                            class="fa fa-mobile-alt me-2"></i> +0123 456 7890</a>
+                            class="fa fa-mobile-alt me-2"></i> +977 9826606151</a>
                 </div>
             </nav>
         </div>

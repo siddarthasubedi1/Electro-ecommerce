@@ -17,17 +17,67 @@
             <h1 class="mb-3">{{ product.name }}</h1>
             <div class="mb-3">
                 {% if product.old_price and product.old_price != product.price %}
-                <del class="me-2 fs-5 text-muted">${{ product.old_price }}</del>
+                <del class="me-2 fs-5 text-muted">Rs.{{ product.old_price }}</del>
                 {% endif %}
-                <span class="fs-3 text-primary fw-bold">${{ product.price }}</span>
+                <span class="fs-3 text-primary fw-bold">Rs.{{ product.price }}</span>
             </div>
             <p class="text-muted">{{ product.description }}</p>
 
-            <div class="d-flex gap-2 mt-4">
-                <a class="btn btn-primary rounded-pill px-4" href="{% url 'cart:cartpage' %}">Add To Cart</a>
-                <a class="btn btn-outline-secondary rounded-pill px-4" href="{% url 'store:shoppage' %}">Back to Shop</a>
-            </div>
+            {% if request.user.is_authenticated %}
+                {% if product.id in cart_product_ids %}
+                    <div class="alert alert-success mt-4" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>This product is already in your cart
+                    </div>
+                    <div class="d-flex gap-2 mt-3">
+                        <a class="btn btn-primary rounded-pill px-4" href="{% url 'store:cart' %}">View Cart</a>
+                        <a class="btn btn-outline-secondary rounded-pill px-4" href="{% url 'store:shoppage' %}">Back to Shop</a>
+                    </div>
+                {% else %}
+                    <form method="post" action="{% url 'store:cartpage' product.id %}" class="mt-4">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="quantity" class="form-label fw-bold">Quantity:</label>
+                            <div class="input-group" style="max-width: 150px;">
+                                <button class="btn btn-outline-secondary" type="button" onclick="decreaseQuantity()">-</button>
+                                <input type="number" class="form-control text-center" id="quantity" name="quantity" value="1" min="1" max="99" required>
+                                <button class="btn btn-outline-secondary" type="button" onclick="increaseQuantity()">+</button>
+                            </div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary rounded-pill px-4">
+                                <i class="fas fa-shopping-cart me-2"></i>Add To Cart
+                            </button>
+                            <a class="btn btn-outline-secondary rounded-pill px-4" href="{% url 'store:shoppage' %}">Back to Shop</a>
+                        </div>
+                    </form>
+                {% endif %}
+            {% else %}
+                <div class="d-flex gap-2 mt-4">
+                    <a class="btn btn-primary rounded-pill px-4" href="{% url 'accounts:loginpage' %}">Login to Add</a>
+                    <a class="btn btn-outline-secondary rounded-pill px-4" href="{% url 'store:shoppage' %}">Back to Shop</a>
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>
+
+<script>
+function increaseQuantity() {
+    const input = document.getElementById('quantity');
+    const currentValue = parseInt(input.value);
+    const max = parseInt(input.max);
+    if (currentValue < max) {
+        input.value = currentValue + 1;
+    }
+}
+
+function decreaseQuantity() {
+    const input = document.getElementById('quantity');
+    const currentValue = parseInt(input.value);
+    const min = parseInt(input.min);
+    if (currentValue > min) {
+        input.value = currentValue - 1;
+    }
+}
+</script>
 {% endblock content %}

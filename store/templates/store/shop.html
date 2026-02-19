@@ -3,7 +3,6 @@
 
 {% block content %}
  
-
     <!-- Single Page Header start -->
     <div class="container-fluid page-header py-5">
         <h1 class="text-center text-white display-6 wow fadeInUp" data-wow-delay="0.1s">Shop Page</h1>
@@ -57,7 +56,7 @@
                         <i class="fas fa-credit-card fa-2x text-primary"></i>
                         <div class="ms-4">
                             <h6 class="text-uppercase mb-2">Receive Gift Card</h6>
-                            <p class="mb-0">Recieve gift all over oder $50</p>
+                            <p class="mb-0">Recieve gift all over oder Rs.50</p>
                         </div>
                     </div>
                 </div>
@@ -151,7 +150,7 @@
                         </div>
                     </form>
                                     
-                    <div class="featured-product mb-4">
+                     <div class="featured-product mb-4">
                         <h4 class="mb-3">Featured products</h4>
                         <div class="featured-product-item">
                             <div class="rounded me-4" style="width: 100px; height: 100px;">
@@ -167,8 +166,8 @@
                                     <i class="fa fa-star"></i>
                                 </div>
                                 <div class="d-flex mb-2">
-                                    <h5 class="fw-bold me-2">2.99 $</h5>
-                                    <h5 class="text-danger text-decoration-line-through">4.11 $</h5>
+                                    <h5 class="fw-bold me-2">2.99 Rs.</h5>
+                                    <h5 class="text-danger text-decoration-line-through">4.11 Rs.</h5>
                                 </div>
                             </div>
                         </div>
@@ -186,8 +185,8 @@
                                     <i class="fa fa-star"></i>
                                 </div>
                                 <div class="d-flex mb-2">
-                                    <h5 class="fw-bold me-2">2.99 $</h5>
-                                    <h5 class="text-danger text-decoration-line-through">4.11 $</h5>
+                                    <h5 class="fw-bold me-2">2.99 Rs.</h5>
+                                    <h5 class="text-danger text-decoration-line-through">4.11 Rs.</h5>
                                 </div>
                             </div>
                         </div>
@@ -205,15 +204,15 @@
                                     <i class="fa fa-star"></i>
                                 </div>
                                 <div class="d-flex mb-2">
-                                    <h5 class="fw-bold me-2">2.99 $</h5>
-                                    <h5 class="text-danger text-decoration-line-through">4.11 $</h5>
+                                    <h5 class="fw-bold me-2">2.99 Rs.</h5>
+                                    <h5 class="text-danger text-decoration-line-through">4.11 Rs.</h5>
                                 </div>
                             </div>
                         </div>
                         <div class="d-flex justify-content-center my-4">
                             <a href="#" class="btn btn-primary px-4 py-3 rounded-pill w-100">Vew More</a>
                         </div>
-                    </div>
+                    </div> 
                     <a href="#">
                         <div class="position-relative">
                             <img src="{% static 'img/product-banner-2.jpg' %}" class="img-fluid w-100 rounded" alt="Image">
@@ -221,7 +220,7 @@
                                 style="width: 100%; height: 100%; top: 0; right: 0; background: rgba(242, 139, 0, 0.3);">
                                 <h5 class="display-6 text-primary">SALE</h5>
                                 <h4 class="text-secondary">Get UP To 50% Off</h4>
-                                <a href="{% url 'cart:cartpage' %}" class="btn btn-primary rounded-pill px-4">Shop Now</a>
+                                <a href="{% url 'store:shoppage' %}" class="btn btn-primary rounded-pill px-4">Shop Now</a>
                             </div>
                         </div>
                     </a>
@@ -249,7 +248,7 @@
                             style="width: 100%; height: 250px; top: 0; left: 0; background: rgba(242, 139, 0, 0.3);">
                             <h4 class="display-5 text-primary">SALE</h4>
                             <h3 class="display-4 text-white mb-4">Get UP To 50% Off</h3>
-                            <a href="{% url 'cart:cartpage' %}" class="btn btn-primary rounded-pill">Shop Now</a>
+                            <a href="{% url 'store:shoppage' %}" class="btn btn-primary rounded-pill">Shop Now</a>
                         </div>
                     </div>
                     <div class="row g-4">
@@ -285,7 +284,7 @@
                         <div id="tab-5" class="tab-pane fade show p-0 active">
                             <div class="row g-4 product">
                                 {% for product in products %}
-                                <div class="col-md-6 col-lg-4 col-xl-3">
+                                <div class="col-12 col-sm-6 col-lg-3">
                                     <div class="product-item rounded wow fadeInUp" data-wow-delay="0.1s">
                                         <div class="product-item-inner border rounded">
                                             <div class="product-item-inner-item">
@@ -306,7 +305,13 @@
                                             </div>
                                         </div>
                                         <div class="product-item-add border border-top-0 rounded-bottom text-center p-4 pt-0">
-                                            <a href="{% url 'cart:cartpage' %}" class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i class="fas fa-shopping-cart me-2"></i> Add To Cart</a>
+                                            {% if request.user.is_authenticated and product.id in cart_product_ids %}
+                                                <a href="#" class="btn btn-secondary border-secondary rounded-pill py-2 px-4 mb-4 disabled" tabindex="-1" aria-disabled="true"><i class="fas fa-check me-2"></i> Added</a>
+                                            {% elif request.user.is_authenticated %}
+                                                <a href="{% url 'store:cartpage' product.id %}" class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i class="fas fa-shopping-cart me-2"></i> Add To Cart</a>
+                                            {% else %}
+                                                <a href="{% url 'accounts:loginpage' %}" class="btn btn-primary border-secondary rounded-pill py-2 px-4 mb-4"><i class="fas fa-user me-2"></i> Login to Add</a>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
@@ -317,18 +322,26 @@
                                 {% endfor %}
                                
                                 
+
                                 <div class="col-12 wow fadeInUp" data-wow-delay="0.1s">
                                     <div class="pagination d-flex justify-content-center mt-5">
-                                        <a href="#" class="rounded">&laquo;</a>
-                                        <a href="#" class="active rounded">1</a>
-                                        <a href="#" class="rounded">2</a>
-                                        <a href="#" class="rounded">3</a>
-                                        <a href="#" class="rounded">4</a>
-                                        <a href="#" class="rounded">5</a>
-                                        <a href="#" class="rounded">6</a>
-                                        <a href="#" class="rounded">&raquo;</a>
+                                        {% if products.has_previous %}
+                                        
+                                        <a href="?page={{ products.previous_page_number }}" class="rounded">&laquo;</a>
+                                        
+                                        {% endif %}
+                                        {% for n in totalpagelist %}
+                                        <a href="?page={{ n }}" class="{% if products.number == n %}active {% endif %}rounded">{{ n }}</a>
+                                        {% endfor %}
+                                        {% if products.has_next %}
+                                        <a href="?page={{ products.next_page_number }}" class="rounded">&raquo;</a>
+                                        <a href="?page={{ lastpage }}" class="rounded">Last</a>
+                                        {% endif %}
                                     </div>
                                 </div>
+
+
+
                             </div>
                         </div>
                         <div id="tab-6" class="products tab-pane fade show p-0">
@@ -359,7 +372,13 @@
                                             </div>
                                         </div>
                                         <div class="products-mini-add border p-3">
-                                            <a href="{% url 'cart:cartpage' %}" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i class="fas fa-shopping-cart me-2"></i> Add To Cart</a>
+                                            {% if request.user.is_authenticated and product.id in cart_product_ids %}
+                                                <a href="#" class="btn btn-secondary border-secondary rounded-pill py-2 px-4 disabled" tabindex="-1" aria-disabled="true"><i class="fas fa-check me-2"></i> Added</a>
+                                            {% elif request.user.is_authenticated %}
+                                                <a href="{% url 'store:cartpage' product.id %}" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i class="fas fa-shopping-cart me-2"></i> Add To Cart</a>
+                                            {% else %}
+                                                <a href="{% url 'accounts:loginpage' %}" class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i class="fas fa-user me-2"></i> Login to Add</a>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>
@@ -373,8 +392,7 @@
                                         <div class="row g-0">
                                             <div class="col-5">
                                                 <div class="products-mini-img border-end h-100">
-                                                    <img src="{% static 'img/product-5.png' %}" class="img-fluid w-100 h-100"
-                                                        alt="Image">
+                                                    <img src="{% static 'img/product-5.png' %}" class="img-fluid w-100 h-100" alt="Image">
                                                     <div class="products-mini-icon rounded-circle bg-primary">
                                                         <a href="#"><i class="fa fa-eye fa-1x text-white"></i></a>
                                                     </div>
@@ -384,28 +402,27 @@
                                                 <div class="products-mini-content p-3">
                                                     <a href="#" class="d-block mb-2">SmartPhone</a>
                                                     <a href="#" class="d-block h4">Apple iPad Mini <br> G2356</a>
-                                                    <del class="me-2 fs-5">$1,250.00</del>
-                                                    <span class="text-primary fs-5">$1,050.00</span>
+                                                    <del class="me-2 fs-5">Rs.1,250.00</del>
+                                                    <span class="text-primary fs-5">Rs.1,050.00</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="products-mini-add border p-3">
-                                            <a href="{% url 'cart:cartpage' %}"
-                                                class="btn btn-primary border-secondary rounded-pill py-2 px-4"><i
-                                                    class="fas fa-shopping-cart me-2"></i> Add To Cart</a>
+                                            <a href="{% url 'store:shoppage' %}" class="btn btn-primary border-secondary rounded-pill py-2 px-4">
+                                                <i class="fas fa-shopping-cart me-2"></i> Add To Cart
+                                            </a>
                                             <div class="d-flex">
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-3"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-random"></i></i></a>
-                                                <a href="#"
-                                                    class="text-primary d-flex align-items-center justify-content-center me-0"><span
-                                                        class="rounded-circle btn-sm-square border"><i
-                                                            class="fas fa-heart"></i></a>
+                                                <a href="#" class="text-primary d-flex align-items-center justify-content-center me-3">
+                                                    <span class="rounded-circle btn-sm-square border"><i class="fas fa-random"></i></span>
+                                                </a>
+                                                <a href="#" class="text-primary d-flex align-items-center justify-content-center me-0">
+                                                    <span class="rounded-circle btn-sm-square border"><i class="fas fa-heart"></i></span>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>
-                               
+                                </div>
+
                                 <div class="col-12 wow fadeInUp" data-wow-delay="0.1s">
                                     <div class="pagination d-flex justify-content-center mt-5">
                                         <a href="#" class="rounded">&laquo;</a>
@@ -438,7 +455,7 @@
                             <div class="position-absolute top-0 start-0 w-100 h-100 d-flex flex-column justify-content-center rounded p-4"
                                 style="background: rgba(255, 255, 255, 0.5);">
                                 <h3 class="display-5 text-primary">EOS Rebel <br> <span>T7i Kit</span></h3>
-                                <p class="fs-4 text-muted">$899.99</p>
+                                <p class="fs-4 text-muted">Rs.899.99 </p>
                                 <a href="#" class="btn btn-primary rounded-pill align-self-start py-2 px-4">Shop Now</a>
                             </div>
                         </div>
@@ -452,7 +469,7 @@
                                 style="background: rgba(242, 139, 0, 0.5);">
                                 <h2 class="display-2 text-secondary">SALE</h2>
                                 <h4 class="display-5 text-white mb-4">Get UP To 50% Off</h4>
-                                <a href="{% url 'cart:cartpage' %}" class="btn btn-secondary rounded-pill align-self-center py-2 px-4">Shop
+                                <a href="{% url 'store:shoppage' %}" class="btn btn-secondary rounded-pill align-self-center py-2 px-4">Shop
                                     Now</a>
                             </div>
                         </div>
