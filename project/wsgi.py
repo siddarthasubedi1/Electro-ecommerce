@@ -16,3 +16,10 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'project.settings')
 application = get_wsgi_application()
 
 app = application  # For compatibility with some WSGI servers
+
+# On Vercel, /tmp/ is ephemeral — run migrations on cold start to create tables
+if os.environ.get('VERCEL'):
+    from django.core.management import call_command
+    import django
+    django.setup()
+    call_command('migrate', '--run-syncdb', verbosity=0)

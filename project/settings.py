@@ -139,12 +139,21 @@ WSGI_APPLICATION = "project.wsgi.application"
 
 # Using SQLite for development (single file database)
 # For production, consider PostgreSQL or MySQL
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",  # Database type
-        "NAME": BASE_DIR / "db.sqlite3",  # Database file location
+# On Vercel, /tmp/ is the only writable directory
+if os.environ.get('VERCEL'):
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": "/tmp/db.sqlite3",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",  # Database type
+            "NAME": BASE_DIR / "db.sqlite3",  # Database file location
+        }
+    }
 
 
 # ============================================================
@@ -212,6 +221,13 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]  # Example: static/css/sty
 # Used for production deployment
 # Static files path
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+
+# WhiteNoise storage backend for serving static files efficiently
+STORAGES = {
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 
 # ============================================================
