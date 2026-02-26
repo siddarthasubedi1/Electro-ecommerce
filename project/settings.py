@@ -37,12 +37,12 @@ SECRET_KEY = "django-insecure-l8a_*ue&11c34%^fnft!yai0cqfzvgcx^6^)zr)vtz+agp6%or
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG mode shows detailed error pages with sensitive information
 # Set to False in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 # List of host/domain names that this Django site can serve
 # IMPORTANT: Must be configured for production
 # Example: ['yourdomain.com', 'www.yourdomain.com']
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # ============================================================
@@ -205,7 +205,7 @@ STATIC_URL = "/static/"
 
 # Directories where Django looks for static files during development
 # These folders are NOT for production - use collectstatic for that
-STATICFILES_DIRS = [os.path.join(BASE_DIR / "static")]  # Example: static/css/style.css
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]  # Example: static/css/style.css
 
 # Directory where collectstatic command collects all static files
 # Run: python manage.py collectstatic
