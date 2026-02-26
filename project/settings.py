@@ -11,7 +11,7 @@ IMPORTANT SECURITY NOTES:
 For more information:
 https://docs.djangoproject.com/en/6.0/topics/settings/
 """
-
+import os
 from pathlib import Path
 
 # ============================================================
@@ -75,6 +75,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",  # Security enhancements
+     'whitenoise.middleware.WhiteNoiseMiddleware',  # Serve static files efficiently in production
     "django.contrib.sessions.middleware.SessionMiddleware",  # Session support
     "django.middleware.common.CommonMiddleware",  # Common features
     "django.middleware.csrf.CsrfViewMiddleware",  # CSRF protection
@@ -106,7 +107,7 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         # Directories where Django looks for templates
         # common_templates/ contains base.html, header.html, etc.
-        "DIRS": [BASE_DIR / "common_templates"],
+        "DIRS": [os.path.join(BASE_DIR, "common_templates")],
         # Allow apps to have their own 'templates' folders
         # Django will look in: app_name/templates/
         "APP_DIRS": True,
@@ -204,13 +205,13 @@ STATIC_URL = "/static/"
 
 # Directories where Django looks for static files during development
 # These folders are NOT for production - use collectstatic for that
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_DIRS = [os.path.join(BASE_DIR / "static")]  # Example: static/css/style.css
 
 # Directory where collectstatic command collects all static files
 # Run: python manage.py collectstatic
 # Used for production deployment
 # Static files path
-STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 
 # ============================================================
